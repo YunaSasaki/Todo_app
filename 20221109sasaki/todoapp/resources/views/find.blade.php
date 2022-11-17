@@ -122,16 +122,16 @@
 @section('title', 'タスク検索')
 
 @section('content')
-<form method="get" class="flex between mb-30">
+<form method="post" class="flex between mb-30">
   @csrf
   <input type="text" class="input-search" name="content" />
   <select class="tag-select" name="tag_id">
     <option value=""></option>
     @foreach($tags as $tag)
-    <option value="{{$tag->id}}">{{ $tag->content }}</option>
+    <option value="{{$tag->id}}">{{$tag->content}}</option>
     @endforeach
   </select>
-  <button formaction="/todo/search" class="button-search" type="submit">検索</button>
+  <button formaction="/search" class="button-search" type="submit">検索</button>
 </form>
 <table>
   <tr>
@@ -151,25 +151,25 @@
       </td>
       <td>
         <input type="hidden" name="id" value="{{$todo->id}}">
-        <input type="text" class="input-update" value="{{ $todo->content }}" name="content" />
+        <input type="text" class="input-update" value="{{$todo->content}}" name="content" />
       </td>
       <td>
         <select class="tag-select" name="tag_id">
           <option value=""></option>
           @foreach($tags as $tag)
           @if($todo->tag_id== $tag->id)
-          <option value="{{ $tag->id }}" selected>{{ $tag->content }}</option>
+          <option value="{{$tag->id}}" selected>{{$tag->content}}</option>
           @else
-          <option value="{{ $tag->id }}">{{ $tag->content }}</option>
+          <option value="{{$tag->id}}">{{$tag->content}}</option>
           @endif
           @endforeach
         </select>
       </td>
       <td>
-        <button formaction="/todo/update" class="button-update" type="submit">更新</button>
+        <button formaction="/update" class="button-update" type="submit">更新</button>
       </td>
       <td>
-        <button formaction="/todo/delete" class="button-delete" type="submit">削除</button>
+        <button formaction="/delete" class="button-delete" type="submit">削除</button>
       </td>
     </tr>
   </form>

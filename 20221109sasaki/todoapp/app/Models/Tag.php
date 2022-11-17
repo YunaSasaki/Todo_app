@@ -11,8 +11,8 @@ class Tag extends Model
 
     protected $guarded = array('id');
 
-    // public function todos()
-    // {
-    //     return $this->hasMany('App\Models\Todo');
-    // }
+    public function todos()
+    {
+        return $this->hasMany('App\Models\Todo');
+    }
 }

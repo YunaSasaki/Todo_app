@@ -122,18 +122,18 @@
 @section('title', 'Todo list')
 
 @section('content')
-<button class="button-find mb-15" onclick="location.href='{{ route('todo.find') }}'" type="button">タスク検索</button>
+<button class="button-find mb-15" onclick="location.href='{{route('todo.find')}}'" type="button">タスク検索</button>
 <form method="post" class="flex between mb-30">
   @csrf
   <input type="text" class="input-add" name="content" />
-  <input type="hidden" name="user_id" value="1" />
+  <input type="hidden" name="user_id" value="{{$user->id}}" />
   <select class="tag-select" name="tag_id">
     <option value=""></option>
     @foreach($tags as $tag)
-    <option value="{{ $tag->id }}">{{ $tag->content }}</option>
+    <option value="{{$tag->id}}">{{$tag->content}}</option>
     @endforeach
   </select>
-  <button formaction="/todo/create" class="button-add" type="submit">追加</button>
+  <button formaction="/create" class="button-add" type="submit">追加</button>
 </form>
 <table>
   <tr>
@@ -148,29 +148,29 @@
     @csrf
     <tr>
       <td>
-        {{ $todo->created_at }}
+        {{$todo->created_at}}
       </td>
       <td>
         <input type="hidden" name="id" value="{{$todo->id}}">
-        <input type="text" class="input-update" value="{{ $todo->content }}" name="content" />
+        <input type="text" class="input-update" value="{{$todo->content}}" name="content" />
       </td>
       <td>
         <select class="tag-select" name="tag_id">
           <option value=""></option>
           @foreach($tags as $tag)
           @if($todo->tag_id== $tag->id)
-            <option value="{{ $tag->id }}" selected>{{ $tag->content }}</option>
+            <option value="{{$tag->id}}" selected>{{$tag->content}}</option>
           @else
-            <option value="{{ $tag->id }}">{{ $tag->content }}</option>
+            <option value="{{$tag->id}}">{{$tag->content}}</option>
           @endif
           @endforeach
         </select>
       </td>
       <td>
-        <button formaction="/todo/update" class="button-update" type="submit">更新</button>
+        <button formaction="/update" class="button-update" type="submit">更新</button>
       </td>
       <td>
-        <button formaction="/todo/delete" class="button-delete" type="submit">削除</button>
+        <button formaction="/delete" class="button-delete" type="submit">削除</button>
       </td>
     </tr>
   </form>

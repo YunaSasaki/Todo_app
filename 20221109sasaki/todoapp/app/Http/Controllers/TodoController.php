@@ -6,20 +6,21 @@ use Illuminate\Http\Request;
 use App\Models\Todo;
 use App\Models\Tag;
 use App\Http\Requests\TodoRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TodoController extends Controller
 {
     public function index()
     {
-        $todos = Todo::all();
+        $user = Auth::user();
+        $todos = Todo::where('user_id', $user->id)->get();
         $tags = Tag::all();
-        return view('index', ['todos' => $todos ,'tags' => $tags]);
+        $param = ['todos' => $todos, 'tags' => $tags, 'user' => $user];
+        return view('index', $param);
     }
     public function create(TodoRequest $request)
     {
         $form = $request->all();
-        var_dump($form);
-        unset($form['_token']);
         Todo::create($form);
         return back();
     }
@@ -37,28 +38,35 @@ class TodoController extends Controller
     }
     public function find()
     {
+        $user = Auth::user();
         $tags = Tag::all();
         $todos = null;
-        // dd($tags);
-        return view('find', ['todos' => $todos, 'tags' => $tags]);
+        $param = ['todos' => $todos, 'tags' => $tags, 'user' => $user];
+        return view('find', $param);
     }
     public function search(Request $request)
     {
+        $user = Auth::user();
         $tags = Tag::all();
-        $keyword = $request['content'];
-        $search_tag = $request['tag_id'];
+        $keyword = $request->content;
+        $search_tag = $request->tag_id;
         if ($keyword != null && $search_tag == null) {
-            $todos = Todo::where('content', 'LIKE', '%' . $keyword . '%')->get();
+            $todos = Todo::where('user_id', $user->id)
+                ->where('content', 'LIKE', '%' . $keyword . '%')
+                ->get();
         }elseif ($keyword == null && $search_tag != null) {
-            $todos = Todo::where('tag_id', $search_tag)->get();
+            $todos = Todo::where('user_id', $user->id)
+                ->where('tag_id', $search_tag)
+                ->get();
         }elseif ($keyword != null && $search_tag != null) {
-            $todos = Todo::where('content', 'LIKE', '%' . $keyword . '%')
+            $todos = Todo::where('user_id', $user->id)
+                ->where('content', 'LIKE', '%' . $keyword . '%')
                 ->where('tag_id', $search_tag)
                 ->get();
         }else{
-            $todos = Todo::all();
+            $todos = Todo::where('user_id', $user->id)->get();
         }
-        // dd($todos);
-        return view('find', ['todos' => $todos, 'tags' => $tags]);
+        $param = ['todos' => $todos, 'tags' => $tags, 'user' => $user];
+        return view('find', $param);
     }
 }

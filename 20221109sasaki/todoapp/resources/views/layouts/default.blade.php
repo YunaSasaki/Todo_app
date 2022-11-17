@@ -252,8 +252,11 @@
       <div class="header flex between mb-15">
         <p class="title">@yield('title')</p>
         <div class="header-right flex">
-          <p class="login-status">「テストユーザー」でログイン中</p>
-          <button class="button-logout">ログアウト</button>
+          <p class="login-status">「{{$user->name}}」でログイン中</p>
+          <form method="POST">
+            @csrf
+            <button class="button-logout" formaction="/logout">ログアウト</button>
+          </form>
         </div>
       </div>
       @if (count($errors) > 0)
